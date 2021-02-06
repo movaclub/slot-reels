@@ -1,0 +1,68 @@
+#page-area {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 55% auto;
+  grid-template-rows: 1fr;
+  gap: .22em;
+  grid-template-areas: 'pay-table reels debug';
+}
+
+#pay-table {
+  display-area: pay-table;
+  display: flex;
+}
+
+#reels {
+  display-area: reels;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+.reels {
+  width: 33%;
+  background: url("../img/reel-1.png") top center;
+  width: 141px;
+  height: 363px;
+  margin: 3% 0;
+  /*-webkit-animation: play 2s steps(5) infinite;*/
+  /*animation: play 2s steps(5) infinite;*/
+}
+
+/*#reel-2 {*/
+/*  width: 33%;*/
+/*  background: url("../img/reel-2.png") top center;*/
+/*  width: 141px;*/
+/*  height: 363px;*/
+/*  margin: 3% 0;*/
+/*  -webkit-animation: play 2s steps(5) infinite;*/
+/*  animation: play 2s steps(5) infinite;*/
+/*}*/
+
+/*#reel-3 {*/
+/*  width: 33%;*/
+/*  background: url("../img/reel-3.png") top center;*/
+/*  width: 141px;*/
+/*  height: 363px;*/
+/*  margin: 3% 0;*/
+/*  -webkit-animation: play 2s steps(5) infinite;*/
+/*  animation: play 2s steps(5) infinite;*/
+/*}*/
+
+/*@-webkit-keyframes play {*/
+/*  0% { background-position: 0 -605px; }*/
+/*  100% { background-position: 0 0; }*/
+/*}*/
+
+/*@keyframes play {*/
+/*  0% { background-position: 0 -605px; }*/
+/*  100% { background-position: 0 0; }*/
+/*}*/
+
+#debug {
+  display-area: debug;
+  display: flex;
+}
