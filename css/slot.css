@@ -9,11 +9,29 @@
 
 #pay-table {
   display-area: pay-table;
+  width: 100%;
+  text-align: center;
+}
+
+.section-title {
+  margin-top: .22em;
+  color: darkgray;
+  flex: 1 1 0;
+  font-size: 1.0248em;
+  font-weight: 700;
+}
+
+#reel-box {
+  display-area: reels;
   display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
 }
 
 #reels {
-  display-area: reels;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -23,13 +41,42 @@
 }
 
 .reels {
-  width: 33%;
+  display: flex;
   background: url("../img/reel-1.png") top center;
   width: 141px;
   height: 363px;
   margin: 3% 0;
+  border: 1px solid lightgray;
+  border-radius: .22em;
   /*-webkit-animation: play 2s steps(5) infinite;*/
   /*animation: play 2s steps(5) infinite;*/
+}
+
+#controls {
+  width: 55%;
+  margin: .22em;
+  padding: .11em;
+  flex: 1 1 0;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+}
+
+.btn-spin {
+  padding: .11em;
+  font-weight: 600;
+  color: snow;
+  width: 100%;
+  background-color: limegreen;
+  border: 0;
+  border-radius: .22em;
+}
+
+.btn-spin:hover {
+  color:red;
+  background-color: snow;
+  border: 1px solid lightgray;
+  cursor: pointer;
 }
 
 /*#reel-2 {*/

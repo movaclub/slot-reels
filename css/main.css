@@ -1,5 +1,5 @@
 :root {
-  width: 80%;
+  width: 69%;
   margin: 0 auto;
   --slot-color: navy;
   font-family: 'Ubuntu', sans-serif;
@@ -42,7 +42,7 @@ a:hover { cursor: pointer; }
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--slot-color);
+  border-bottom: 1px solid lightgray;
   color: var(--slot-color);
   height: 2rem;
 }

@@ -148,7 +148,7 @@ function main(){
     promiseList.push(
       new Promise((resolve) => {
         let timer = speed * randomInteger(6, 12);
-        // console.log('Timer: ', timer);
+        console.log('Timer: ', timer);
         setTimeout(() => {
           let tmp = [];
           stopAnimation(intervals[id]);
@@ -176,9 +176,9 @@ function main(){
     //   ["bar-2", "bar-2", "bar-2"],
     //   ['cherry', "seven", "cherry"]
     // ];
-    console.log('Matrix: ', matrix);
-    console.log('Stats: ', getWinScore(matrix));
+    // console.log('Matrix: ', matrix);
+    // console.log('Stats: ', getWinScore(matrix));
   });
 }
 
-main();
+// main();

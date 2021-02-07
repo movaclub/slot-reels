@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>Slots</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -32,14 +32,22 @@
 
   <main id="area">
     <div id="page-area">
-      <section id="pay-table">Pay Table</section>
-      <section id="reels">
-        <div id="reel-1" class="reels"></div>
-        <div id="reel-2" class="reels"></div>
-        <div id="reel-3" class="reels"></div>
+      <section id="pay-table">
+        <div class="section-title">Pay Table</div>
+        <div class="paytable-item">1</div>
+        <div class="paytable-item">2</div>
       </section>
-<!--      <section>Controls</section>-->
-      <section id="debug">DEbug</section>
+      <section id="reel-box">
+        <section id="reels">
+          <div id="reel-1" class="reels"></div>
+          <div id="reel-2" class="reels"></div>
+          <div id="reel-3" class="reels"></div>
+        </section>
+        <section id="controls">
+          <button class="btn-spin" onclick="main()">Spin</button>
+        </section>
+      </section>
+      <section class="section-title" id="debug">Debug</section>
     </div>
   </main>
 
