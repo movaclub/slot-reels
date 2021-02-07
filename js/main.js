@@ -1,12 +1,13 @@
 //Debug mode
 var isDebug = false;
 let dOpt = [];
+let setIntervals = []; // tracking blinking
 
 //test
 dOpt = [
-  {frame: 'bar-1', position: 'bot', reelId: 0},
-  {frame: 'bar-1', position: 'bot', reelId: 1},
-  {frame: 'bar-1', position: 'bot', reelId: 2}
+  {frame: 'seven', position: 'bot', reelId: 0},
+  {frame: 'seven', position: 'bot', reelId: 1},
+  {frame: 'seven', position: 'bot', reelId: 2}
 ];
 
 //Animation
@@ -25,7 +26,38 @@ function randomInteger(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
 }
 
-function getFramePositioInPixels(opt) {
+// win blinking
+function blink(el) {
+  var curEl = document.getElementById(el);
+  const curID = setInterval(function () {
+    curEl.style.color = (curEl.style.color == 'red' ? 'black' : 'red');
+  }, 444);
+  setIntervals.push(curID);
+}
+
+// reset blinking
+function resetBlink() {
+  for (let iID of setIntervals ) {
+    clearInterval(iID);
+  }
+  const elSet = [
+    'win-cherry-top',
+    'win-cherry-mid',
+    'win-cherry-bot',
+    'win-bar-1',
+    'win-bar-2',
+    'win-bar-3',
+    'win-bars',
+    'win-cherry-7',
+    'win-7'
+  ];
+  for (let el of elSet) {
+    let curEl = document.getElementById(el);
+    curEl.style.color = 'black';
+  }
+}
+
+function getFramePositionInPixels(opt) {
   let coef = 0;
   switch (opt.frame) {
     case 'seven':
@@ -73,6 +105,7 @@ function switchDebugMode() {
 }
 
 function setDefaultDebugMode() {
+
   let id = 0;
   for (let r of reels) {
     dOpt.push({frame: 'seven', position: 'top', reelId: id});
@@ -81,11 +114,12 @@ function setDefaultDebugMode() {
 }
 
 function setupDebugMode() {
+  resetBlink();
   if (!isDebug) return;
   let matrix = Array(reels.length);
   for (let id = 0; id < reels.length; id++) {
     let tmp = [];
-    let position = getFramePositioInPixels(dOpt.find((el) => el.reelId === id));
+    let position = getFramePositionInPixels(dOpt.find((el) => el.reelId === id));
     console.log(`Reel id: ${id}, position: ${position}`)
     reels[id].style.backgroundPosition = `0px -${position}px`;
 
@@ -115,7 +149,6 @@ function getLines(matrix) {
 // count wins
 function getWinScore(rmatrix) {
   let totalScore = 0;
-
   for (let i = 0; i < rmatrix.length; i++) {
     if (i === 0) {
       console.log(i, ' - ', rmatrix[i]);
@@ -128,6 +161,7 @@ function getWinScore(rmatrix) {
       if (!seven && !cherry) {
         const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
         cherry7 ? totalScore += 75 : totalScore += 0;
+        cherry ? blink('win-cherry-7') : null;
       }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
@@ -140,7 +174,14 @@ function getWinScore(rmatrix) {
       if (!bar3 && !bar2 && !bar1) {
         const bar = rmatrix[i].every(el => el.match('bar'));
         bar ? totalScore += 5 : totalScore += 0;
+        bar ? blink('win-bars') : null;
       }
+
+      cherry ? blink('win-cherry-top') : null;
+      seven ? blink('win-7') : null;
+      bar3 ? blink('win-bar-3') : null;
+      bar2 ? blink('win-bar-2') : null;
+      bar1 ? blink('win-bar-1') : null;
 
     } else if (i === 1) {
       console.log(i, ' - ', rmatrix[i]);
@@ -153,6 +194,7 @@ function getWinScore(rmatrix) {
       if (!seven && !cherry) {
         const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
         cherry7 ? totalScore += 75 : totalScore += 0;
+        cherry ? blink('win-cherry-7') : null;
       }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
@@ -165,7 +207,14 @@ function getWinScore(rmatrix) {
       if (!bar3 && !bar2 && !bar1) {
         const bar = rmatrix[i].every(el => el.match('bar'));
         bar ? totalScore += 5 : totalScore += 0;
+        bar ? blink('win-bars') : null;
       }
+
+      cherry ? blink('win-cherry-mid') : null;
+      seven ? blink('win-7') : null;
+      bar3 ? blink('win-bar-3') : null;
+      bar2 ? blink('win-bar-2') : null;
+      bar1 ? blink('win-bar-1') : null;
 
     } else if (i === 2) {
       console.log(i, ' - ', rmatrix[i]);
@@ -178,6 +227,7 @@ function getWinScore(rmatrix) {
       if (!seven && !cherry) {
         const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
         cherry7 ? totalScore += 75 : totalScore += 0;
+        cherry ? blink('win-cherry-7') : null;
       }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
@@ -190,7 +240,14 @@ function getWinScore(rmatrix) {
       if (!bar3 && !bar2 && !bar1) {
         const bar = rmatrix[i].every(el => el.match('bar'));
         bar ? totalScore += 5 : totalScore += 0;
+        bar ? blink('win-bars') : null;
       }
+
+      cherry ? blink('win-cherry-bot') : null;
+      seven ? blink('win-7') : null;
+      bar3 ? blink('win-bar-3') : null;
+      bar2 ? blink('win-bar-2') : null;
+      bar1 ? blink('win-bar-1') : null;
 
     }
   }
@@ -247,6 +304,7 @@ function detectFrame(position) {
 function main() {
   let intervals = [];
   let promiseList = [];
+  resetBlink();
   for (let reel of reels) {
     intervals.push(startAnimation(reel));
   }
