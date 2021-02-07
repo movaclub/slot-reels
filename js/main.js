@@ -1,3 +1,14 @@
+//Debug mode
+var isDebug = false;
+let dOpt = [];
+
+//test
+dOpt = [
+  {frame: 'bar-1', position: 'bot', reelId: 0},
+  {frame: 'bar-1', position: 'bot', reelId: 1},
+  {frame: 'bar-1', position: 'bot', reelId: 2}
+];
+
 //Animation
 const speed = 100; //in millisecond(ms)
 
@@ -12,6 +23,82 @@ const reels = document.getElementsByClassName('reels');
 function randomInteger(min, max) {
   // from min to (max+1)
   return Math.floor(min + Math.random() * (max + 1 - min));
+}
+
+function getFramePositioInPixels(opt) {
+  let coef = 0;
+  switch (opt.frame) {
+    case 'seven':
+      coef = 0;
+      break;
+    case 'bar-1':
+      coef = 1;
+      break;
+    case 'bar-2':
+      coef = 2;
+      break;
+    case 'cherry':
+      coef = 3;
+      break;
+    case 'bar-3':
+      coef = 4;
+      break;
+  }
+
+  switch (opt.position) {
+    case 'top':
+      coef -= 0;
+      break;
+    case 'mid':
+      coef -= 1;
+      break;
+    case 'bot':
+      coef -= 2;
+      break;
+  }
+
+  let pix = spriteHeight * coef;
+  while (pix < 0) {
+    pix += totalSpriteHeight;
+  }
+  return pix;
+}
+
+function switchDebugMode() {
+  isDebug = !isDebug;
+
+  if (dOpt.length !== reels.length) {
+    setDefaultDebugMode();
+  }
+}
+
+function setDefaultDebugMode() {
+  let id = 0;
+  for (let r of reels) {
+    dOpt.push({frame: 'seven', position: 'top', reelId: id});
+    id++;
+  }
+}
+
+function setupDebugMode() {
+  if (!isDebug) return;
+  let matrix = Array(reels.length);
+  for (let id = 0; id < reels.length; id++) {
+    let tmp = [];
+    let position = getFramePositioInPixels(dOpt.find((el) => el.reelId === id));
+    console.log(`Reel id: ${id}, position: ${position}`)
+    reels[id].style.backgroundPosition = `0px -${position}px`;
+
+    let currPosition = Math.abs(parseInt(reels[id].style.backgroundPosition.split(' ')[1]));
+    tmp.push(detectFrame((currPosition / spriteHeight) + 1));
+    tmp.push(detectFrame((currPosition / spriteHeight) + 2));
+    tmp.push(detectFrame((currPosition / spriteHeight) + 3));
+    matrix[id] = [...tmp];
+  }
+
+  let rmatrix = getLines(matrix);
+  console.log('debug RM: ', rmatrix);
+  console.log('debug Stats: ', getWinScore(rmatrix));
 }
 
 // rotate matrix: reels to rows transform
@@ -35,8 +122,13 @@ function getWinScore(rmatrix) {
       const cherry = rmatrix[i].every(el => el.match('cherry'));
       cherry ? totalScore += 2000 : totalScore += 0;
 
-      const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
-      cherry7 ? totalScore += 75 : totalScore += 0;
+      const seven = rmatrix[i].every(el => el.match('seven'));
+      seven ? totalScore += 150 : totalScore += 0;
+
+      if (!seven && !cherry) {
+        const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
+        cherry7 ? totalScore += 75 : totalScore += 0;
+      }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
       bar3 ? totalScore += 50 : totalScore += 0;
@@ -55,8 +147,13 @@ function getWinScore(rmatrix) {
       const cherry = rmatrix[i].every(el => el.match('cherry'));
       cherry ? totalScore += 1000 : totalScore += 0;
 
-      const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
-      cherry7 ? totalScore += 75 : totalScore += 0;
+      const seven = rmatrix[i].every(el => el.match('seven'));
+      seven ? totalScore += 150 : totalScore += 0;
+
+      if (!seven && !cherry) {
+        const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
+        cherry7 ? totalScore += 75 : totalScore += 0;
+      }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
       bar3 ? totalScore += 50 : totalScore += 0;
@@ -75,8 +172,13 @@ function getWinScore(rmatrix) {
       const cherry = rmatrix[i].every(el => el.match('cherry'));
       cherry ? totalScore += 4000 : totalScore += 0;
 
-      const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
-      cherry7 ? totalScore += 75 : totalScore += 0;
+      const seven = rmatrix[i].every(el => el.match('seven'));
+      seven ? totalScore += 150 : totalScore += 0;
+
+      if (!seven && !cherry) {
+        const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
+        cherry7 ? totalScore += 75 : totalScore += 0;
+      }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
       bar3 ? totalScore += 50 : totalScore += 0;
@@ -158,14 +260,6 @@ function main() {
           let tmp = [];
           stopAnimation(intervals[id]);
           let position = Math.abs(parseInt(reels[id].style.backgroundPosition.split(' ')[1]));
-          // console.log(
-          //   `Reel-${id}
-          //   Style: ${reels[id].style.backgroundPosition}
-          //   Position: ${position}`
-          // );
-          // console.log(`Reel-${id+1}  Pos: `, detectFrame((position / spriteHeight) + 1));
-          // console.log(`Reel-${id+1}  Pos: `, detectFrame((position / spriteHeight) + 2));
-          // console.log(`Reel-${id+1}  Pos: `, detectFrame((position / spriteHeight) + 3));
           tmp.push(detectFrame((position / spriteHeight) + 1));
           tmp.push(detectFrame((position / spriteHeight) + 2));
           tmp.push(detectFrame((position / spriteHeight) + 3));

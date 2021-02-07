@@ -141,7 +141,14 @@
           <button class="btn-spin" onclick="main()">Spin</button>
         </section>
       </section>
-      <section class="section-title" id="debug">Debug</section>
+      <section id="debug">
+        <div class="section-title">Debug</div>
+        <div>
+          <label for="debug-mode">Debug mode</label>
+          <input id="debug-mode" type="checkbox" title="Debug mode" onchange="switchDebugMode()" />
+        </div>
+        <button onclick="setupDebugMode()">Setup config</button>
+      </section>
     </div>
   </main>
 
