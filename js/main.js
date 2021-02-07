@@ -1,4 +1,3 @@
-
 //Animation
 const speed = 100; //in millisecond(ms)
 
@@ -15,86 +14,90 @@ function randomInteger(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
 }
 
-function checkHorFrameLine(frame, matrix){
-  for(let i = 0; i < matrix.length; i++){
-    for(let j = 1; j < matrix[i].length; j++){
-      if(matrix[i][j-1] === matrix[i][j] && matrix[i][j] === frame){
-        if( j === (matrix[i].length - 1) ) return i;
-      } else {
-        break;
-      }
-    }
+// rotate matrix: reels to rows transform
+function getLines(matrix) {
+  let result = [];
+  for (let i = 0; i < matrix[0].length; i++) {
+    let row = matrix.map(e => e[i]).reverse();
+    result.push(row);
   }
+  return result;
+};
 
-  return null;
-}
 
-function getWinScore(matrix) {
+// count wins
+function getWinScore(rmatrix) {
   let totalScore = 0;
 
-  let checkCherryLine = checkHorFrameLine('cherry', matrix);
-  console.log('Check cherry in line: ', checkCherryLine);
-  if( checkCherryLine === 0 ) totalScore += 2000;
-  if( checkCherryLine === 1 ) totalScore += 1000;
-  if( checkCherryLine === 2 ) totalScore += 4000;
+  for (let i = 0; i < rmatrix.length; i++) {
+    if (i === 0) {
+      console.log(i, ' - ', rmatrix[i]);
+      const cherry = rmatrix[i].every(el => el.match('cherry'));
+      cherry ? totalScore += 2000 : totalScore += 0;
 
-  let checkSeven = checkHorFrameLine('seven', matrix);
-  console.log('Check seven in line: ', checkSeven);
-  if( checkSeven !== null ) totalScore += 150;
+      const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
+      cherry7 ? totalScore += 75 : totalScore += 0;
 
-  let bar3 = checkHorFrameLine('bar-3', matrix);
-  console.log('Check bar3 in line: ', bar3);
-  if( bar3 !== null ) totalScore += 50;
+      const bar3 = rmatrix[i].every(el => el.match('bar-3'));
+      bar3 ? totalScore += 50 : totalScore += 0;
+      const bar2 = rmatrix[i].every(el => el.match('bar-2'));
+      bar2 ? totalScore += 20 : totalScore += 0;
+      const bar1 = rmatrix[i].every(el => el.match('bar-1'));
+      bar1 ? totalScore += 10 : totalScore += 0;
 
-  let bar2 = checkHorFrameLine('bar-2', matrix);
-  console.log('Check bar2 in line: ', bar2);
-  if( bar2 !== null ) totalScore += 20;
-
-  let bar1 = checkHorFrameLine('bar-1', matrix);
-  console.log('Check bar1 in line: ', bar1);
-  if( bar1 !== null ) totalScore += 10;
-
-  for(let i = 0; i < matrix.length; i++){
-    for(let j = 1; j < matrix[i].length; j++){
-      if((matrix[i][j-1] === 'cherry' || matrix[i][j-1] === 'seven') && (matrix[i][j] === 'cherry' || matrix[i][j] === 'seven')){
-        if( j === (matrix[i].length - 1) ){
-          console.log('cherry & seven = true');
-          totalScore += 75;
-        }
-      } else {
-        break;
+      if (!bar3 && !bar2 && !bar1) {
+        const bar = rmatrix[i].every(el => el.match('bar'));
+        bar ? totalScore += 5 : totalScore += 0;
       }
+
+    } else if (i === 1) {
+      console.log(i, ' - ', rmatrix[i]);
+      const cherry = rmatrix[i].every(el => el.match('cherry'));
+      cherry ? totalScore += 1000 : totalScore += 0;
+
+      const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
+      cherry7 ? totalScore += 75 : totalScore += 0;
+
+      const bar3 = rmatrix[i].every(el => el.match('bar-3'));
+      bar3 ? totalScore += 50 : totalScore += 0;
+      const bar2 = rmatrix[i].every(el => el.match('bar-2'));
+      bar2 ? totalScore += 20 : totalScore += 0;
+      const bar1 = rmatrix[i].every(el => el.match('bar-1'));
+      bar1 ? totalScore += 10 : totalScore += 0;
+
+      if (!bar3 && !bar2 && !bar1) {
+        const bar = rmatrix[i].every(el => el.match('bar'));
+        bar ? totalScore += 5 : totalScore += 0;
+      }
+
+    } else if (i === 2) {
+      console.log(i, ' - ', rmatrix[i]);
+      const cherry = rmatrix[i].every(el => el.match('cherry'));
+      cherry ? totalScore += 4000 : totalScore += 0;
+
+      const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
+      cherry7 ? totalScore += 75 : totalScore += 0;
+
+      const bar3 = rmatrix[i].every(el => el.match('bar-3'));
+      bar3 ? totalScore += 50 : totalScore += 0;
+      const bar2 = rmatrix[i].every(el => el.match('bar-2'));
+      bar2 ? totalScore += 20 : totalScore += 0;
+      const bar1 = rmatrix[i].every(el => el.match('bar-1'));
+      bar1 ? totalScore += 10 : totalScore += 0;
+
+      if (!bar3 && !bar2 && !bar1) {
+        const bar = rmatrix[i].every(el => el.match('bar'));
+        bar ? totalScore += 5 : totalScore += 0;
+      }
+
     }
   }
-
-  for(let i = 0; i < matrix.length; i++){
-    console.log(`Vec ${i+1}: ${matrix[i]}`);
-    for(let j = 1; j < matrix[i].length; j++){
-      if((matrix[i][j-1] === 'bar-3' || matrix[i][j-1] === 'bar-2' || matrix[i][j-1] === 'bar-1') && (matrix[i][j] === 'bar-3' || matrix[i][j] === 'bar-2' || matrix[i][j] === 'bar-1')){
-        if( j === (matrix[i].length - 1) ){
-          console.log('bars = true');
-          totalScore += 5;
-        }
-      } else {
-        break;
-      }
-    }
-  }
-
-  // let cs = checkHorFrameLine(['seven', 'cherry'], matrix);
-  // console.log('Check cherry & seven in line: ', cs);
-  // if( cs !== null ) totalScore += 75;
-  //
-  // let bars = checkHorFrameLine(['bar-1', 'bar-2', 'bar-3'], matrix);
-  // console.log('Check bars in line: ', bars);
-  // if( bars !== null ) totalScore += 5;
-
 
   return totalScore;
 }
 
-function stopAnimation(intervalVar){
-  if(!intervalVar) return;
+function stopAnimation(intervalVar) {
+  if (!intervalVar) return;
   clearInterval(intervalVar);
 }
 
@@ -115,9 +118,11 @@ function startAnimation(reel) {
   return interval;
 }
 
-function detectFrame(position){
-  while(position > 5){ position -= 5; }
-  switch(position){
+function detectFrame(position) {
+  while (position > 5) {
+    position -= 5;
+  }
+  switch (position) {
     case 1:
       return 'seven'
       break;
@@ -137,18 +142,18 @@ function detectFrame(position){
 }
 
 //Main func
-function main(){
+function main() {
   let intervals = [];
   let promiseList = [];
-  for(let reel of reels){
-    intervals.push( startAnimation(reel) );
+  for (let reel of reels) {
+    intervals.push(startAnimation(reel));
   }
 
-  for(let id = 0; id < intervals.length; id++){
+  for (let id = 0; id < intervals.length; id++) {
     promiseList.push(
       new Promise((resolve) => {
         let timer = speed * randomInteger(6, 12);
-        console.log('Timer: ', timer);
+        // console.log('Timer: ', timer);
         setTimeout(() => {
           let tmp = [];
           stopAnimation(intervals[id]);
@@ -176,9 +181,10 @@ function main(){
     //   ["bar-2", "bar-2", "bar-2"],
     //   ['cherry', "seven", "cherry"]
     // ];
-    // console.log('Matrix: ', matrix);
-    // console.log('Stats: ', getWinScore(matrix));
+    console.log('Matrix: ', matrix);
+
+    let rmatrix = getLines(matrix);
+    console.log('RM: ', rmatrix);
+    console.log('Stats: ', getWinScore(rmatrix));
   });
 }
-
-// main();

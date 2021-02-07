@@ -1,7 +1,7 @@
 #page-area {
   width: 100%;
   display: grid;
-  grid-template-columns: auto 55% auto;
+  grid-template-columns: 25% 55% 20%;
   grid-template-rows: 1fr;
   gap: .22em;
   grid-template-areas: 'pay-table reels debug';
@@ -13,8 +13,48 @@
   text-align: center;
 }
 
+.paytable-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.paytable-item {
+  flex: 1;
+  display: flex;
+  border: 1px dotted lightgray;
+}
+
+.payable-item-set {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.payable-item-set-desc {
+  flex: 1;
+  flex-basis: 50%;
+  font-size: 88%;
+  text-align: left;
+}
+
+.payable-item-set-img {
+  flex: 1;
+  flex-basis: 40%;
+}
+
+.payable-item-set-win {
+  flex: 1;
+  flex-basis: 10%;
+  font-weight: 700;
+}
+
+.payable-img {
+  width: 20%;
+  height: auto;
+}
+
 .section-title {
-  margin-top: .22em;
+  margin: .22em 0;
   color: darkgray;
   flex: 1 1 0;
   font-size: 1.0248em;
