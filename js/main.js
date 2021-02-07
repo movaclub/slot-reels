@@ -1,13 +1,51 @@
+// glob presets
+document.getElementById('btn-debug').disabled = true;
+document.getElementById('btn-spin').disabled = false;
+
 //Debug mode
 var isDebug = false;
 let dOpt = [];
 let setIntervals = []; // tracking blinking
 
+function reel1pos() {
+  dOpt[0]['position'] = document.getElementById('reel1pos').value;
+}
+
+function reel1frame() {
+  dOpt[0]['frame'] = document.getElementById('reel1frame').value;
+}
+
+function reel2pos() {
+  dOpt[1]['position'] = document.getElementById('reel2pos').value;
+}
+
+function reel2frame() {
+  dOpt[1]['frame'] = document.getElementById('reel2frame').value;
+}
+
+function reel3pos() {
+  dOpt[2]['position'] = document.getElementById('reel3pos').value;
+}
+
+function reel3frame() {
+  dOpt[2]['frame'] = document.getElementById('reel3frame').value;
+}
+
+function doDebugSetup() {
+  reel1pos();
+  reel1frame();
+  reel2pos();
+  reel2frame();
+  reel3pos();
+  reel3frame();
+}
+
+
 //test
 dOpt = [
-  {frame: 'seven', position: 'bot', reelId: 0},
-  {frame: 'seven', position: 'bot', reelId: 1},
-  {frame: 'seven', position: 'bot', reelId: 2}
+  {frame: 'bar-3', position: 'bot', reelId: 0},
+  {frame: 'bar-1', position: 'bot', reelId: 1},
+  {frame: 'bar-3', position: 'bot', reelId: 2}
 ];
 
 //Animation
@@ -30,14 +68,14 @@ function randomInteger(min, max) {
 function blink(el) {
   var curEl = document.getElementById(el);
   const curID = setInterval(function () {
-    curEl.style.color = (curEl.style.color == 'red' ? 'black' : 'red');
+    curEl.style.color = (curEl.style.color === 'red' ? 'black' : 'red');
   }, 444);
   setIntervals.push(curID);
 }
 
 // reset blinking
 function resetBlink() {
-  for (let iID of setIntervals ) {
+  for (let iID of setIntervals) {
     clearInterval(iID);
   }
   const elSet = [
@@ -99,23 +137,22 @@ function getFramePositionInPixels(opt) {
 function switchDebugMode() {
   isDebug = !isDebug;
 
-  if (dOpt.length !== reels.length) {
-    setDefaultDebugMode();
+  if (isDebug) {
+    document.getElementById('btn-debug').disabled = false;
+    document.getElementById('btn-spin').disabled = true;
+  } else {
+    document.getElementById('btn-debug').disabled = true;
+    document.getElementById('btn-spin').disabled = false;
   }
-}
 
-function setDefaultDebugMode() {
-
-  let id = 0;
-  for (let r of reels) {
-    dOpt.push({frame: 'seven', position: 'top', reelId: id});
-    id++;
-  }
 }
 
 function setupDebugMode() {
   resetBlink();
+  console.log('DOPT1: ', dOpt);
   if (!isDebug) return;
+  doDebugSetup();
+  console.log('DOPT2: ', dOpt);
   let matrix = Array(reels.length);
   for (let id = 0; id < reels.length; id++) {
     let tmp = [];
@@ -145,10 +182,10 @@ function getLines(matrix) {
   return result;
 };
 
-
 // count wins
 function getWinScore(rmatrix) {
   let totalScore = 0;
+  let payTableArray = [0, 0, 0, 0, 0, 0];
   for (let i = 0; i < rmatrix.length; i++) {
     if (i === 0) {
       console.log(i, ' - ', rmatrix[i]);
@@ -161,7 +198,7 @@ function getWinScore(rmatrix) {
       if (!seven && !cherry) {
         const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
         cherry7 ? totalScore += 75 : totalScore += 0;
-        cherry ? blink('win-cherry-7') : null;
+        cherry7 ? payTableArray[4] = true : payTableArray[4] = payTableArray[4];
       }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
@@ -174,14 +211,14 @@ function getWinScore(rmatrix) {
       if (!bar3 && !bar2 && !bar1) {
         const bar = rmatrix[i].every(el => el.match('bar'));
         bar ? totalScore += 5 : totalScore += 0;
-        bar ? blink('win-bars') : null;
+        bar ? payTableArray[0] = true : payTableArray[0] = payTableArray[0];
       }
 
       cherry ? blink('win-cherry-top') : null;
-      seven ? blink('win-7') : null;
-      bar3 ? blink('win-bar-3') : null;
-      bar2 ? blink('win-bar-2') : null;
-      bar1 ? blink('win-bar-1') : null;
+      seven ? payTableArray[5] = true : payTableArray[5] = payTableArray[5];
+      bar3 ? payTableArray[3] = true : payTableArray[3] = payTableArray[3];
+      bar2 ? payTableArray[2] = true : payTableArray[2] = payTableArray[2];
+      bar1 ? payTableArray[1] = true : payTableArray[1] = payTableArray[1];
 
     } else if (i === 1) {
       console.log(i, ' - ', rmatrix[i]);
@@ -194,7 +231,7 @@ function getWinScore(rmatrix) {
       if (!seven && !cherry) {
         const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
         cherry7 ? totalScore += 75 : totalScore += 0;
-        cherry ? blink('win-cherry-7') : null;
+        cherry7 ? payTableArray[4] = true : payTableArray[4] = payTableArray[4];
       }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
@@ -207,14 +244,14 @@ function getWinScore(rmatrix) {
       if (!bar3 && !bar2 && !bar1) {
         const bar = rmatrix[i].every(el => el.match('bar'));
         bar ? totalScore += 5 : totalScore += 0;
-        bar ? blink('win-bars') : null;
+        bar ? payTableArray[0] = true : payTableArray[0] = payTableArray[0];
       }
 
       cherry ? blink('win-cherry-mid') : null;
-      seven ? blink('win-7') : null;
-      bar3 ? blink('win-bar-3') : null;
-      bar2 ? blink('win-bar-2') : null;
-      bar1 ? blink('win-bar-1') : null;
+      seven ? payTableArray[5] = true : payTableArray[5] = payTableArray[5];
+      bar3 ? payTableArray[3] = true : payTableArray[3] = payTableArray[3];
+      bar2 ? payTableArray[2] = true : payTableArray[2] = payTableArray[2];
+      bar1 ? payTableArray[1] = true : payTableArray[1] = payTableArray[1];
 
     } else if (i === 2) {
       console.log(i, ' - ', rmatrix[i]);
@@ -227,7 +264,7 @@ function getWinScore(rmatrix) {
       if (!seven && !cherry) {
         const cherry7 = rmatrix[i].every(el => el.match(/(cherry|seven)/));
         cherry7 ? totalScore += 75 : totalScore += 0;
-        cherry ? blink('win-cherry-7') : null;
+        cherry7 ? payTableArray[4] = true : payTableArray[4] = payTableArray[4];
       }
 
       const bar3 = rmatrix[i].every(el => el.match('bar-3'));
@@ -240,18 +277,26 @@ function getWinScore(rmatrix) {
       if (!bar3 && !bar2 && !bar1) {
         const bar = rmatrix[i].every(el => el.match('bar'));
         bar ? totalScore += 5 : totalScore += 0;
-        bar ? blink('win-bars') : null;
+        bar ? payTableArray[0] = true : payTableArray[0] = payTableArray[0];
       }
 
       cherry ? blink('win-cherry-bot') : null;
-      seven ? blink('win-7') : null;
-      bar3 ? blink('win-bar-3') : null;
-      bar2 ? blink('win-bar-2') : null;
-      bar1 ? blink('win-bar-1') : null;
+      seven ? payTableArray[5] = true : payTableArray[5] = payTableArray[5];
+      bar3 ? payTableArray[3] = true : payTableArray[3] = payTableArray[3];
+      bar2 ? payTableArray[2] = true : payTableArray[2] = payTableArray[2];
+      bar1 ? payTableArray[1] = true : payTableArray[1] = payTableArray[1];
 
     }
   }
 
+  payTableArray[4] ? blink('win-cherry-7') : null;
+  payTableArray[3] ? blink('win-bar-3') : null;
+  payTableArray[2] ? blink('win-bar-2') : null;
+  payTableArray[1] ? blink('win-bar-1') : null;
+  payTableArray[0] ? blink('win-bars') : null;
+  payTableArray[5] ? blink('win-7') : null;
+
+  document.getElementById('current-win').innerText = totalScore;
   return totalScore;
 }
 
@@ -328,15 +373,10 @@ function main() {
   }
 
   Promise.all(promiseList).then((matrix) => {
-    // let matrix = [
-    //   ['bar-2', "bar-2", "bar-3"],
-    //   ["bar-2", "bar-2", "bar-2"],
-    //   ['cherry', "seven", "cherry"]
-    // ];
-    console.log('Matrix: ', matrix);
-
+    // console.log('Matrix: ', matrix);
     let rmatrix = getLines(matrix);
-    console.log('RM: ', rmatrix);
-    console.log('Stats: ', getWinScore(rmatrix));
+    let total = getWinScore(rmatrix);
+    // console.log('RM: ', rmatrix);
+    console.log('Stats: ', total);
   });
 }

@@ -127,6 +127,9 @@
             </div>
             <div id="win-bars" class="payable-item-set-win">5</div>
           </div>
+          <div class="paytable-item">
+            Current Spin Win: <span class="payable-item-set-win" id="current-win">0</span>
+          </div>
 
         </div>
 
@@ -138,16 +141,76 @@
           <div id="reel-3" class="reels"></div>
         </section>
         <section id="controls">
-          <button class="btn-spin" onclick="main()">Spin</button>
+          <button id="btn-spin" class="btn-spin" onclick="main()">Spin</button>
         </section>
       </section>
       <section id="debug">
-        <div class="section-title">Debug</div>
-        <div>
-          <label for="debug-mode">Debug mode</label>
-          <input id="debug-mode" type="checkbox" title="Debug mode" onchange="switchDebugMode()" />
+        <div id="debug-box">
+          <div class="section-title">Debug</div>
+            <form name="debug-form">
+              <div class="debug-box-item">
+                <label for="debug-mode"><u>Debuggin Reels</u></label>
+              <input class="debug-checkmark"
+                     id="debug-mode"
+                     type="checkbox"
+                     title="Debug mode"
+                     onchange="switchDebugMode()"/>
+              </div>
+              <div class="debug-box-item">
+                #1
+                <select id="reel1pos" onchange="reel1pos()">
+                  <option value="top">Top</option>
+                  <option value="mid">Center</option>
+                  <option value="bot">Bottom</option>
+                </select>
+
+                <select id="reel1frame" onchange="reel1frame()">
+                  <option value="cherry">Cherry</option>
+                  <option value="bar-1">Bar1</option>
+                  <option value="bar-2">Bar2</option>
+                  <option value="bar-3">Bar3</option>
+                  <option value="seven">Seven</option>
+                </select>
+
+              </div>
+              <div class="debug-box-item">
+                #2
+                <select id="reel2pos" onchange="reel2pos()">
+                  <option value="top">Top</option>
+                  <option value="mid">Center</option>
+                  <option value="bot">Bottom</option>
+                </select>
+
+                <select id="reel2frame" onchange="reel2frame()">
+                  <option value="cherry">Cherry</option>
+                  <option value="bar-1">Bar1</option>
+                  <option value="bar-2">Bar2</option>
+                  <option value="bar-3">Bar3</option>
+                  <option value="seven">Seven</option>
+                </select>
+
+              </div>
+              <div class="debug-box-item">
+                #3
+                <select id="reel3pos" onchange="reel3pos()">
+                  <option value="top">Top</option>
+                  <option value="mid">Center</option>
+                  <option value="bot">Bottom</option>
+                </select>
+
+                <select id="reel3frame" onchange="reel3frame()">
+                  <option value="cherry">Cherry</option>
+                  <option value="bar-1">Bar1</option>
+                  <option value="bar-2">Bar2</option>
+                  <option value="bar-3">Bar3</option>
+                  <option value="seven">Seven</option>
+                </select>
+
+              </div>
+              <div class="debug-box-item"></div>
+            </form>
         </div>
-        <button onclick="setupDebugMode()">Setup config</button>
+        <button id="btn-debug" onclick="setupDebugMode()">Do Debug</button>
       </section>
     </div>
   </main>
